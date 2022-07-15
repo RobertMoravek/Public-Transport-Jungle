@@ -1,0 +1,22 @@
+* {
+    background-color: beige;
+    margin: 0;
+    
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+
+    border: dotted black 3px;
+}
+
+.invisible {
+    display: none;
+}

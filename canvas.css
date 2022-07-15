@@ -1,0 +1,19 @@
+* {
+    background-color: beige;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+
+    border: dotted black 3px;
+}
+
+.invisible {
+    display: none;
+}
