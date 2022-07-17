@@ -1,3 +1,4 @@
+<div class="placeholder">
 <h1>No more public transport jungle!</h1>
 <p>The 9-Euro-Ticket has proven, that people are hindered from freely travelling
     not only by high prices, but also by the hard to navigate web of German
@@ -10,22 +11,25 @@
 <h2>Then sign our petition!</h2>
 <form method="POST">
     <label for="firstName" class="formLabel">First Name</label>
-    <input type="text" name="firstName" id="firstName" />
+    <input type="text" name="firstName" id="firstName" {{#if signingFailed}}{{#if firstName}}value="{{firstName}}" {{else}} class="red-border"{{/if}}{{/if}}/>
     <label for="lastName" class="formLabel">Last Name</label>
-    <input type="text" name="lastName" id="lastName" />
+    <input type="text" name="lastName" id="lastName" {{#if signingFailed}}{{#if lastName}}value="{{lastName}}" {{else}} class="red-border"{{/if}}{{/if}}/>
     <input
         type="text"
         name="signatureURL"
         id="signatureURL"
         class="invisible"
+        
     />
-    <button id="submitSignature" class="submit">SUBMIT</button>
+    <label for="sigField">Sign your name with your mouse or finger here:</label>
+    <canvas width="600" height="200" id="sigField" name="sigField" class="canvas {{#if signingFailed}}{{#if signatureURL}}{{signatureURL}}{{else}}red-border{{/if}}{{/if}}"></canvas>
+    <input type="submit" id="submitSignature" class="submit" value="SIGN NOW!"></input>
 </form>
-<label for="sigField">Sign your name with your mouse or finger here:</label>
-<canvas width="600" height="200" id="sigField" name="sigField"></canvas>
+{{#if signingFailed}}<p class="red bold">You have not filled in all the required fields. Please check again and resubmit!</p>{{/if}}
 <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     crossorigin="anonymous"
 ></script>
 <script src="canvas.js"></script>
+</div>

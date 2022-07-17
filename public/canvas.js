@@ -55,10 +55,13 @@ function recordSignature(event) {
 // Stop the recording of the signature and convert to URL
 
 function stopRecordingSignature(event) {
-    mouseIsDown = false;
-    canvasURL = sigField[0].toDataURL();
-    $("#signatureURL").val(canvasURL);
-    console.log(canvasURL);
+    if (mouseIsDown) {
+        mouseIsDown = false;
+        canvasURL = sigField[0].toDataURL();
+        $("#signatureURL").val(canvasURL);
+        console.log(canvasURL);
+
+    }
 }
 
 

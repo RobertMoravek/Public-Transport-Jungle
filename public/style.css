@@ -1,22 +1,46 @@
 * {
-    background-color: beige;
     margin: 0;
+    box-sizing: content-box;
     
 }
 
 body {
-    height: 100vh;
+    width: 50vw;
+    max-width: 90vw;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 5% auto;
+    
 }
 
-canvas {
+.canvas {
 
     border: dotted black 3px;
 }
 
 .invisible {
     display: none;
+}
+
+.red {
+    color: rgb(211, 0, 0);
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.red-border {
+    border: 3px solid rgb(211, 0, 0);
+}
+
+.placeholder {
+    background-color: rgba(255, 255, 255, 0.98);
+    padding: 30px;
 }
