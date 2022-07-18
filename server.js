@@ -1,19 +1,39 @@
 // Requires and Apps
 
+// -> Express
 const express = require("express");
 const app = express();
+app.use(express.urlencoded({ extended: false }));
+
+// -> Cookie Stuff
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
+
+const cookieSession = require("cookie-session");
+app.use(
+    cookieSession({
+        secret: `Better run through the jungle!`,
+        maxAge: undefined,
+    })
+);
+
+
+// -> Handlebars config
 const hb = require("express-handlebars");
-
-
-//Handlebars config
 app.engine("handlebars", hb.engine());
 app.set("view engine", "handlebars");
 //END Handlebars config
 
+
+// -> Helmet
+
+const helmet = require("helmet");
+app.use(helmet());
+
+// -> DB
 const db = require("./db.js");
+
+
 
 
 // USING and GETTING
@@ -29,15 +49,20 @@ app.use(express.static("./public"));
 //     next();
 // })
 
+
+// Home Directory Redirects to Petition
+
 app.get("/", (req, res) => {
     // res.sendStatus(301);
     res.redirect("/petition");
     return; 
 })
 
+// Petition page
+
 app.get("/petition", (req, res) => {
-    if (!req.cookies.petitionSigned) {
-        console.log('trying to render petition');
+    if (!req.session.signatureId) {
+        console.log("trying to render petition");
         res.render("petition", {
             url: req.url,
             title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
@@ -51,61 +76,58 @@ app.get("/petition", (req, res) => {
 })
 
 app.post("/petition", (req, res) => {
-    if (!req.cookies.petitionSigned) {
+    if (!req.session.signatureId) {
         let { firstName, lastName, signatureURL } = req.body;
         // console.log(req.body);
         // console.log(firstName, lastName, signatureURL);
-        if (firstName && lastName && signatureURL){
+        if (firstName && lastName && signatureURL) {
             db.addSupporter(firstName, lastName, signatureURL)
                 .then((result) => {
-                    res.cookie("petitionSigned", true);
-                    res.cookie("id", result);
+                    req.session.signatureId = result;
                     res.redirect("/thanks");
                     return;
                 })
                 .catch((err) => {
-                    console.log('Error on database query:', err);
+                    console.log("Error on database query:", err);
                     return;
                 });
-
-            
         } else {
             res.render("petition", {
-            signingFailed: true,
-            firstName,
-            lastName,
-            signatureURL,
-            url: req.url,
-            title: req.url.slice(1,2).toUpperCase() + req.url.slice(2)
-            
-        });
-        return; 
+                signingFailed: true,
+                firstName,
+                lastName,
+                signatureURL,
+                url: req.url,
+                title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+            });
+            return;
         }
-
-        
     } else {
         res.redirect("/thanks");
-
     };
 });
 
+
+// Thanks Page
+
 app.get("/thanks", (req, res) => {
-    if(req.cookies.petitionSigned) {
-        db.showSigner(req.cookies.id)
-        .then(({id, first, last, signature}) => {
-            db.getNumOfSigners()
-                .then((result) => {
-                   res.render("thanks", {
-                    first,
-                    last,
-                    signature,
-                    url: req.url,
-                    title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-                    numOfSigners: result.rows[0].count
-                }); 
+    if (req.session.signatureId) {
+        db.showSigner(req.session.signatureId).then(
+            ({ id, first, last, signature }) => {
+                db.getNumOfSigners().then((result) => {
+                    res.render("thanks", {
+                        first,
+                        last,
+                        signature,
+                        url: req.url,
+                        title:
+                            req.url.slice(1, 2).toUpperCase() +
+                            req.url.slice(2),
+                        numOfSigners: result.rows[0].count,
+                    });
                 });
-            
-        })
+            }
+        );
     } else {
         res.redirect("/petition");
     }
@@ -115,17 +137,17 @@ app.get("/thanks", (req, res) => {
 
 });
 
-app.get("/supporters", (req, res) => {
-    if(req.cookies.petitionSigned){
-        let supporters = db.showSupporters()
-            .then((supporters) => {
-                res.render("supporters", {
-                    supporters,
-                    url: req.url,
-                    title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-                });
-            });
+// Supporters Page
 
+app.get("/supporters", (req, res) => {
+    if (req.session.signatureId) {
+        let supporters = db.showSupporters().then((supporters) => {
+            res.render("supporters", {
+                supporters,
+                url: req.url,
+                title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+            });
+        });
     } else {
         res.redirect("/petition");
     }

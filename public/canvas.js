@@ -1,70 +1,102 @@
-const sigField = $("#sigField");
-const sigFieldOffsetY = sigField.offset().top;
-const sigFieldOffsetX = sigField.offset().left;
+$(document).ready(createCanvas); 
 
-const ctx = sigField[0].getContext("2d");
+function createCanvas() {
+    let sigMissing = $(".signature").data("error");
+    // if ($(".signature").data() == "red-border"){
+    //     console.log('hurra');
+    // };
 
-// Variables
+    $("canvas").remove();
+    $("#label-for-canvas").after(`<canvas width="${$("main").width()-30}" height="200" id="sigField" name="sigField" class="canvas ${sigMissing}"></canvas>`);
+    
 
-let mouseIsDown = false;
-let mouseXStart;
-let mouseYStart;
-let canvasURL;
+    const sigField = $("#sigField");
+    const sigFieldOffsetY = sigField.offset().top;
+    const sigFieldOffsetX = sigField.offset().left;
+
+    const ctx = sigField[0].getContext("2d");
+
+    // Variables
+
+    let mouseIsDown = false;
+    let mouseXStart;
+    let mouseYStart;
+    let canvasURL;
 
 
-// Event Listeners
+    // Event Listeners
 
-$("#sigField").on("mousedown", startTracking);
-$(document).on("mousemove", recordSignature);
-$(document).on("mouseup", stopRecordingSignature);
-
-
-
-// Start the tracking process
-
-function startTracking(event) {
-    mouseXStart = event.pageX - sigFieldOffsetX;
-    mouseYStart = event.pageY - sigFieldOffsetY;
-    mouseIsDown = true;
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = "black";
-    ctx.lineCap = "round";
-    ctx.beginPath();
-    ctx.moveTo(mouseXStart, mouseYStart);
-    // ctx.clearRect(0, 0, sigField.width, sigField.height);
-
-}
+    $("#sigField").on("mousedown", startTracking).on("touchstart", startTracking);
+    $(document).on("mousemove", recordSignature).on("touchmove", recordSignature);
+    $(document).on("mouseup", stopRecordingSignature).on("touchend", stopRecordingSignature);
 
 
 
-// Record the signature
-function recordSignature(event) {
-    if (mouseIsDown){
-        let mouseXCurr = event.pageX - sigFieldOffsetX;
-        let mouseYCurr = event.pageY - sigFieldOffsetY;
+    // Start the tracking process
 
+    function startTracking(event) {
+        console.log(event.changedTouches);
+        if (!event.changedTouches) {
+            mouseXStart = event.pageX - sigFieldOffsetX;
+            mouseYStart = event.pageY - sigFieldOffsetY;
+            mouseIsDown = true;
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = "black";
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(mouseXStart, mouseYStart);
+        } else {
+            console.log('start Touch track');
+            mouseXStart = event.changedTouches[0].pageX - sigFieldOffsetX;
+            mouseYStart = event.changedTouches[0].pageY - sigFieldOffsetY;
+            mouseIsDown = true;
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = "black";
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(mouseXStart, mouseYStart);
+        }
 
-        ctx.lineTo(mouseXCurr, mouseYCurr);
-        ctx.stroke();
 
     }
-}
 
 
 
-// Stop the recording of the signature and convert to URL
+    // Record the signature
+    function recordSignature(event) {
+        if (mouseIsDown && !event.changedTouches) {
+            let mouseXCurr = event.pageX - sigFieldOffsetX;
+            let mouseYCurr = event.pageY - sigFieldOffsetY;
 
-function stopRecordingSignature(event) {
-    if (mouseIsDown) {
-        mouseIsDown = false;
-        canvasURL = sigField[0].toDataURL();
-        $("#signatureURL").val(canvasURL);
-        console.log(canvasURL);
+            ctx.lineTo(mouseXCurr, mouseYCurr);
+            ctx.stroke();
+        } else if (mouseIsDown) {
+            console.log('record touch track');
+            let mouseXCurr = event.changedTouches[0].pageX - sigFieldOffsetX;
+            let mouseYCurr = event.changedTouches[0].pageY - sigFieldOffsetY;
 
+            ctx.lineTo(mouseXCurr, mouseYCurr);
+            ctx.stroke();
+        }
     }
+
+
+
+    // Stop the recording of the signature and convert to URL
+
+    function stopRecordingSignature(event) {
+        if (mouseIsDown) {
+            mouseIsDown = false;
+            canvasURL = sigField[0].toDataURL();
+            $("#signatureURL").val(canvasURL);
+            console.log(canvasURL);
+
+        }
+    }
+
+    $(window).on("resize", createCanvas);
+
 }
-
-
 
 
 
