@@ -27,18 +27,29 @@ app.set("view engine", "handlebars");
 
 // -> Helmet
 
-const helmet = require("helmet");
-app.use(helmet());
+
 
 // -> DB
 const db = require("./db.js");
 
 
+let loggedin;
+
+app.use("/*", (req, res, next) => {
+    if (req.session.userId) {
+        loggedin = true;
+    } else {
+        loggedin = false;
+    }
+    console.log("loged in", loggedin);
+    next();
+
+})
 
 
-// USING and GETTING
+    // USING and GETTING
 
-app.use(express.static("./public"));
+    app.use(express.static("./public"));
 
 // app.use((req, res, next) => {
 //     if (!req.cookies.petitionSigned) {
@@ -48,6 +59,145 @@ app.use(express.static("./public"));
 //     }
 //     next();
 // })
+
+
+
+// Register
+
+app.get("/register", (req, res) => {
+    if (!req.session.userId) {
+        console.log("trying to render registration page");
+        res.render("register", {
+            register: true,
+            url: req.url,
+            title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+            loggedin
+        });
+        return;
+    }
+
+    res.redirect("/thanks");
+    return;
+});
+
+app.post("/register", (req, res) => {
+    if (!req.session.signatureId) {
+        let { firstName, lastName, email, password } = req.body;
+
+        if (firstName && lastName && email && password.length > 7) {
+            db.insertUser(firstName, lastName, email, password)
+                .then((result) => {
+                    req.session.userId = result;
+                    res.redirect("/petition");
+                    return;
+                })
+                .catch((err) => {
+                    console.log("Error on database query:", err);
+                    res.render("register", {
+                        registrationFailed: true,
+                        firstName,
+                        lastName,
+                        email,
+                        password,
+                        url: req.url,
+                        title:
+                            req.url.slice(1, 2).toUpperCase() +
+                            req.url.slice(2),
+                        loggedin,
+                    });
+                    return;
+                });
+        } else {
+            res.render("register", {
+                registrationFailed: true,
+                firstName,
+                lastName,
+                email,
+                password,
+                url: req.url,
+                title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+                loggedin
+            });
+            return;
+        }
+    } else {
+        res.redirect("/thanks");
+    }
+});
+
+
+
+// Login
+
+app.get("/login", (req, res) => {
+    if (!req.session.userId){
+        res.render("login", {
+            url: req.url,
+            title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+        });
+        return
+    } else {
+        res.redirect("/thanks");
+        return
+    }
+})
+
+
+app.post("/login", (req, res) => {
+    if (!req.session.signatureId) {
+        let { email, password } = req.body;
+
+        if (email && password) {
+            db.loginUser(email, password)
+                .then((result) => {
+                    console.log("result in then of loginUser in server", result);
+                    if(result){
+                        req.session.userId = result;
+                        res.redirect("/petition");
+                        return;
+                    } else {
+                        res.render("login", {
+                            loginFailed: true,
+                            email,
+                            password,
+                            url: req.url,
+                            title:
+                                req.url.slice(1, 2).toUpperCase() +
+                                req.url.slice(2),
+                            loggedin,
+                        });
+                        return;
+                    }
+                })
+                .catch((err) => {
+                    console.log("Error on database query:", err);
+                    res.render("login", {
+                        loginFailed: true,
+                        email,
+                        password,
+                        url: req.url,
+                        title:
+                            req.url.slice(1, 2).toUpperCase() +
+                            req.url.slice(2),
+                        loggedin,
+                    });
+                    return;
+                });
+        } else {
+            res.render("login", {
+                loginFailed: true,
+                email,
+                password,
+                url: req.url,
+                title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+                loggedin
+            });
+            return;
+        }
+    } else {
+        res.redirect("/thanks");
+    }
+});
 
 
 // Home Directory Redirects to Petition
@@ -61,29 +211,44 @@ app.get("/", (req, res) => {
 // Petition page
 
 app.get("/petition", (req, res) => {
-    if (!req.session.signatureId) {
-        console.log("trying to render petition");
-        res.render("petition", {
-            url: req.url,
-            title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+    
+
+    if (req.session.userId) {
+        
+        db.checkSignature(req.session.userId)
+        .then((result) => {
+            if (result) {
+                res.redirect("/thanks");
+                return;
+            } else {
+                console.log("trying to render petition");
+                res.render("petition", {
+                            url: req.url,
+                            title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+                            loggedin
+                        });
+                        // Show petition sign page
+                return;
+            }
         });
-        // Show petition sign page
+
+        
+    } else {
+        res.redirect("/register");
         return;
+        
     }
 
-    res.redirect("/thanks");
-    return;
 })
 
 app.post("/petition", (req, res) => {
-    if (!req.session.signatureId) {
-        let { firstName, lastName, signatureURL } = req.body;
+    if (req.session.userId) {
+        let { signatureURL } = req.body;
         // console.log(req.body);
         // console.log(firstName, lastName, signatureURL);
-        if (firstName && lastName && signatureURL) {
-            db.addSupporter(firstName, lastName, signatureURL)
-                .then((result) => {
-                    req.session.signatureId = result;
+        if ( signatureURL) {
+            db.addSignature(req.session.userId, signatureURL)
+                .then(() => {
                     res.redirect("/thanks");
                     return;
                 })
@@ -94,16 +259,15 @@ app.post("/petition", (req, res) => {
         } else {
             res.render("petition", {
                 signingFailed: true,
-                firstName,
-                lastName,
                 signatureURL,
                 url: req.url,
                 title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+                loggedin
             });
             return;
         }
     } else {
-        res.redirect("/thanks");
+        res.redirect("/register");
     };
 });
 
@@ -111,25 +275,27 @@ app.post("/petition", (req, res) => {
 // Thanks Page
 
 app.get("/thanks", (req, res) => {
-    if (req.session.signatureId) {
-        db.showSigner(req.session.signatureId).then(
-            ({ id, first, last, signature }) => {
+    if (req.session.userId) {
+        db.showSigner(req.session.userId).then(
+            ([resultUser, resultSignature]) => {
+                console.log('resultUser, resultSignature', resultUser, resultSignature);
                 db.getNumOfSigners().then((result) => {
                     res.render("thanks", {
-                        first,
-                        last,
-                        signature,
+                        first: resultUser.first,
+                        last: resultUser.last,
+                        signature: resultSignature.signature,
                         url: req.url,
                         title:
                             req.url.slice(1, 2).toUpperCase() +
                             req.url.slice(2),
                         numOfSigners: result.rows[0].count,
+                        loggedin
                     });
                 });
             }
         );
     } else {
-        res.redirect("/petition");
+        res.redirect("/register");
     }
     
 
@@ -140,19 +306,29 @@ app.get("/thanks", (req, res) => {
 // Supporters Page
 
 app.get("/supporters", (req, res) => {
-    if (req.session.signatureId) {
+    if (req.session.userId) {
         let supporters = db.showSupporters().then((supporters) => {
             res.render("supporters", {
                 supporters,
                 url: req.url,
                 title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+                loggedin
             });
         });
     } else {
-        res.redirect("/petition");
+        res.redirect("/register");
     }
     
 })
+
+app.get("/logout", (req, res) => {
+    req.session.userId = undefined;
+    loggedin = false;
+    res.redirect("/login");
+    
+})
+
+
 
 
 // Other pages

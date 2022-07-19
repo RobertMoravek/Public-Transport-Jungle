@@ -1,0 +1,17 @@
+<a href="./register" class="login">REGISTER</a>
+<h1>No more public transport jungle!</h1>
+
+<h2>Log in, please!</h2>
+<form method="POST" class="petition-form">
+    <label for="email" class="formLabel bold">E-Mail:</label>
+    <input type="email" name="email" id="email" {{#if loginFailed}}{{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    <label for="password" class="formLabel bold">Password:</label>
+    <input type="password" name="password" id="password" {{#if loginFailed}}{{#if password}}value="{{password}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    <input type="submit" id="submitSignature" class="submit" value="Log in"></input>
+</form>
+{{#if loginFailed}}<p class="red bold">You have not filled in all the required fields or your info was incorrect. Please check again and resubmit!</p>{{/if}}
+<script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+<script src=""></script>

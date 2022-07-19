@@ -9,17 +9,7 @@
     tram, subway, bus or commmuter-ferry in the entire country.</span></p>
 <h2>Do you agree? Then sign our petition!</h2>
 <form method="POST" class="petition-form">
-    <label for="firstName" class="formLabel bold">First Name:</label>
-    <input type="text" name="firstName" id="firstName" {{#if signingFailed}}{{#if firstName}}value="{{firstName}}" {{else}} class="red-border"{{/if}}{{/if}}/>
-    <label for="lastName" class="formLabel bold">Last Name:</label>
-    <input type="text" name="lastName" id="lastName" {{#if signingFailed}}{{#if lastName}}value="{{lastName}}" {{else}} class="red-border"{{/if}}{{/if}}/>
-    <input
-        type="text"
-        name="signatureURL"
-        id="signatureURL"
-        class="invisible"
-        
-    />
+    <input type="text" name="signatureURL" id="signatureURL" class="invisible"/>
     <div class="signature" data-error="{{#if signingFailed}}{{#if signatureURL}}{{else}}red-border{{/if}}{{/if}}">
         <label for="sigField" class="formlabel bold" id="label-for-canvas">Sign your name with your mouse or finger here:</label>
         {{!-- <canvas width="400" height="200" id="sigField" name="sigField" class="canvas {{#if signingFailed}}{{#if signatureURL}}{{signatureURL}}{{else}}red-border{{/if}}{{/if}}"></canvas> --}}
@@ -31,6 +21,5 @@
 <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-    crossorigin="anonymous"
-></script>
+    crossorigin="anonymous"></script>
 <script src="canvas.js"></script>

@@ -1,5 +1,13 @@
+ a, a:hover, a:focus, a:active {
+     text-decoration: none;
+     color: inherit;
+ }
 
-main {
+ a:hover, a:focus {
+    background-color: rgb(201, 201, 201);
+ }
+
+.container {
     border-top-right-radius: 30px;
     border-bottom-left-radius: 30px;
 }
@@ -55,6 +63,8 @@ p {
 
 .signature {
     margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .formlabel {
@@ -74,6 +84,9 @@ input {
     font-size: 1.5rem;
     padding: 1rem;
     border: 3px solid black;
+    -webkit-box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2); 
+    box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2);
+    cursor: pointer;
 
 }
 
@@ -105,6 +118,16 @@ button {
     flex-direction: column;
 }
 
+.login {
+    border: 3px solid black;
+    align-self: flex-end;
+    padding: 0.5rem 1rem;
+    margin-bottom: 2rem;
+    -webkit-box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2); 
+    box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2);
+    
+}
+
 
 
 @media screen and (min-width: 800px) {
@@ -129,7 +152,7 @@ button {
         margin: auto;
     }
 
-    main {
+    .container {
         width: 700px;
         max-width: 90%;
         background-color: rgba(255, 255, 255, 0.95);
@@ -166,7 +189,7 @@ button {
         margin: auto;
     }
 
-    main {
+    .container {
         max-width: 95%;
 
         background-color: rgba(255, 255, 255, 0.95);

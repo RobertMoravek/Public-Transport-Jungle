@@ -7,7 +7,7 @@ function createCanvas() {
     // };
 
     $("canvas").remove();
-    $("#label-for-canvas").after(`<canvas width="${$("main").width()-30}" height="200" id="sigField" name="sigField" class="canvas ${sigMissing}"></canvas>`);
+    $("#label-for-canvas").after(`<canvas width="${$(".container").width()-30}" height="200" id="sigField" name="sigField" class="canvas ${sigMissing}"></canvas>`);
     
 
     const sigField = $("#sigField");
