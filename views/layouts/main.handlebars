@@ -7,18 +7,18 @@
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
         </style>
-        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="../style.css" />
 
     </head>
-    <body background="./{{url}}-bg.jpg">
+    <body background="..{{url}}-bg.jpg">
        <div class="container">
-       {{#if register}}<a href="./login" class="login">LOG IN</a>{{/if}}
-       {{#if loggedin}}<a href="./logout" class="login">LOG OUT</a>{{/if}}
+       {{#if register}}<a href="../login" class="login">LOG IN</a>{{/if}}
+       {{#if loggedin}}<a href="../logout" class="login">LOG OUT</a>{{/if}}
 
         {{{body}}}
 
         </div>
         
-        <script src="./script.js"></script>
+        <script src="../script.js"></script>
     </body>
 </html>

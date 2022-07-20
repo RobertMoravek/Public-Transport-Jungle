@@ -7,6 +7,16 @@
     background-color: rgb(201, 201, 201);
  }
 
+.user-link {
+    text-decoration: underline;
+    color: inherit;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.user-link:hover, .user-link:focus {
+    text-decoration: underline;
+}
+
 .container {
     border-top-right-radius: 30px;
     border-bottom-left-radius: 30px;
@@ -107,6 +117,7 @@ span {
 li {
     font-family: Arial, Helvetica, sans-serif;
     margin: 1rem;
+    list-style-type: square;
 }
 
 button {

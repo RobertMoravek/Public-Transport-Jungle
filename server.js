@@ -33,32 +33,10 @@ app.set("view engine", "handlebars");
 const db = require("./db.js");
 
 
-let loggedin;
-
-app.use("/*", (req, res, next) => {
-    if (req.session.userId) {
-        loggedin = true;
-    } else {
-        loggedin = false;
-    }
-    console.log("loged in", loggedin);
-    next();
-
-})
+// USING and GETTING
 
 
-    // USING and GETTING
-
-    app.use(express.static("./public"));
-
-// app.use((req, res, next) => {
-//     if (!req.cookies.petitionSigned) {
-//         res.sendStatus(301);
-//         res.redirect("/petition");
-//         return; 
-//     }
-//     next();
-// })
+app.use(express.static("./public"));
 
 
 
@@ -71,7 +49,7 @@ app.get("/register", (req, res) => {
             register: true,
             url: req.url,
             title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-            loggedin
+            loggedin: req.session.userId
         });
         return;
     }
@@ -88,8 +66,13 @@ app.post("/register", (req, res) => {
             db.insertUser(firstName, lastName, email, password)
                 .then((result) => {
                     req.session.userId = result;
-                    res.redirect("/petition");
-                    return;
+                    db.checkSignature(result)
+                    .then((result) => {
+                            console.log(result);
+                            req.session.signed = result;
+                            res.redirect("/profile");
+                            return;
+                    });
                 })
                 .catch((err) => {
                     console.log("Error on database query:", err);
@@ -103,7 +86,7 @@ app.post("/register", (req, res) => {
                         title:
                             req.url.slice(1, 2).toUpperCase() +
                             req.url.slice(2),
-                        loggedin,
+                        loggedin: req.session.userId,
                     });
                     return;
                 });
@@ -116,7 +99,7 @@ app.post("/register", (req, res) => {
                 password,
                 url: req.url,
                 title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-                loggedin
+                loggedin: req.session.userId
             });
             return;
         }
@@ -153,8 +136,12 @@ app.post("/login", (req, res) => {
                     console.log("result in then of loginUser in server", result);
                     if(result){
                         req.session.userId = result;
-                        res.redirect("/petition");
-                        return;
+                        db.checkSignature(result)
+                            .then((result) => {
+                                req.session.signed = result;
+                                res.redirect("/petition");
+                                return;
+                            })
                     } else {
                         res.render("login", {
                             loginFailed: true,
@@ -164,7 +151,7 @@ app.post("/login", (req, res) => {
                             title:
                                 req.url.slice(1, 2).toUpperCase() +
                                 req.url.slice(2),
-                            loggedin,
+                            loggedin: req.session.userId,
                         });
                         return;
                     }
@@ -179,7 +166,7 @@ app.post("/login", (req, res) => {
                         title:
                             req.url.slice(1, 2).toUpperCase() +
                             req.url.slice(2),
-                        loggedin,
+                        loggedin: req.session.userId,
                     });
                     return;
                 });
@@ -190,12 +177,76 @@ app.post("/login", (req, res) => {
                 password,
                 url: req.url,
                 title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-                loggedin
+                loggedin: req.session.userId
             });
             return;
         }
     } else {
         res.redirect("/thanks");
+    }
+});
+
+
+// Profile Page
+
+app.get("/profile", (req, res) => {
+    console.log("trying to render profile page");
+    if (req.session.userId) {
+        res.render("profile", {
+            url: req.url,
+            title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+            loggedin: req.session.userId,
+        });
+        return;
+    }
+
+    res.redirect("/register");
+    return;
+});
+
+app.post("/profile", (req, res) => {
+    if (req.session.userId) {
+        let { age, city, userUrl } = req.body;
+        if (age == ""){
+            age = undefined;
+        }
+        
+        
+        function deleteSpacesFromBeginning(input) {
+            if (input.startsWith(" ")) {
+                console.log("if");
+                input = input.slice(1);
+                console.log("input after slice", input);
+                deleteSpacesFromBeginning(input);
+                return input;
+            } else {
+                console.log("else", input);
+                city = input;
+            }
+        }
+        deleteSpacesFromBeginning(city);
+        deleteSpacesFromBeginning(userUrl);
+        
+        if (!userUrl.startsWith("http://") || !userUrl.startsWith("https://")) {
+            userUrl = "https://" + userUrl;
+        };
+
+        city = city.toLowerCase();
+        db.insertProfile(req.session.userId, age, city, userUrl)
+            .then(() => {
+                console.log('redirecting to petition');
+                res.redirect("/petition");
+                
+            })
+            .catch((err) => {
+                console.log("insert Error", err);
+                res.redirect("/petition");
+                return;
+            });
+        
+        
+    } else {
+        res.redirect("/login");
     }
 });
 
@@ -212,11 +263,10 @@ app.get("/", (req, res) => {
 
 app.get("/petition", (req, res) => {
     
-
     if (req.session.userId) {
-        
         db.checkSignature(req.session.userId)
         .then((result) => {
+            // console.log('result of checkSignature', result);
             if (result) {
                 res.redirect("/thanks");
                 return;
@@ -225,7 +275,7 @@ app.get("/petition", (req, res) => {
                 res.render("petition", {
                             url: req.url,
                             title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-                            loggedin
+                            loggedin: req.session.userId
                         });
                         // Show petition sign page
                 return;
@@ -262,7 +312,7 @@ app.post("/petition", (req, res) => {
                 signatureURL,
                 url: req.url,
                 title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-                loggedin
+                loggedin: req.session.userId
             });
             return;
         }
@@ -289,7 +339,7 @@ app.get("/thanks", (req, res) => {
                             req.url.slice(1, 2).toUpperCase() +
                             req.url.slice(2),
                         numOfSigners: result.rows[0].count,
-                        loggedin
+                        loggedin: req.session.userId
                     });
                 });
             }
@@ -297,24 +347,32 @@ app.get("/thanks", (req, res) => {
     } else {
         res.redirect("/register");
     }
-    
-
-    
-
 });
+
 
 // Supporters Page
 
 app.get("/supporters", (req, res) => {
     if (req.session.userId) {
-        let supporters = db.showSupporters().then((supporters) => {
-            res.render("supporters", {
-                supporters,
-                url: req.url,
-                title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-                loggedin
+        let supporters = db.showSupporters()
+            .then((supporters) => {
+                // console.log("Supporters: ",supporters)
+                for (let item of supporters) {
+                    if (item.city){
+                        item.cityLink = item.city.split(" ").join("-");
+                        console.log(item.city);
+                        item.city = item.city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
+
+                    }
+                };
+                
+                res.render("supporters", {
+                    supporters,
+                    url: req.url,
+                    title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+                    loggedin: req.session.userId
+                });
             });
-        });
     } else {
         res.redirect("/register");
     }
@@ -322,37 +380,36 @@ app.get("/supporters", (req, res) => {
 })
 
 app.get("/logout", (req, res) => {
-    req.session.userId = undefined;
-    loggedin = false;
-    res.redirect("/login");
+    req.session = undefined;
+    
+    res.redirect("../login");
     
 })
 
+app.get("/supporters/:city", (req, res) => {
+    if (!req.session.userId) {
+        res.redirect("/login");
+        return;
+    } else {
+        req.params.city = req.params.city.split("-").join(" ");
+        console.log(req.params.city);
+        db.showSupportersCity(req.params.city)
+            .then((supporters) => {
+                for (let item of supporters) {
+                item.cityLink = item.city.split(" ").join("-");
+                item.city = item.city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
+            };
+                res.render("supporterscity", {
+                    supporters,
+                    url:  "/supporters",
+                    title: "Supporters from " + req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+                    loggedin: req.session.userId,
+        });
+            })
+        
 
+    }
 
-
-// Other pages
-
-// app.get("/actors", (req, res) => {
-//     db.getActors().
-//         then((results) => {
-//             console.log("results from getActors", results.rows);
-//         })
-//         .catch((err) => {
-//             console.log('Error in actors');
-//         })
-// });
-
-// app.post("/add-city", (req, res) => {
-//     db.addActor("Michael Fassbender", 46)
-// })
-//     .then(() => {
-//         console.log('it worked');
-//     })
-//     .catch(() => {
-//         console.log('failure');
-//     })
-
-
+});
 
 app.listen(8080, () => {console.log('Petition Server is listening on 8080');})

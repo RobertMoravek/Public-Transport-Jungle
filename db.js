@@ -23,6 +23,16 @@ module.exports.insertUser = (firstName, lastName, email, password) => {
         });
 }
 
+module.exports.insertProfile = (id, age, city, userUrl) => {
+    return db.query(
+        `
+        INSERT INTO profile (id, age, city, userurl)
+            VALUES ($1, $2, $3, $4)`,
+        [id, age, city, userUrl]
+    )};
+
+
+
 module.exports.loginUser = (email, password) => {
     let temp = null;
     return db.query(
@@ -92,11 +102,36 @@ module.exports.showSigner = (id) => {
 };  
 
 module.exports.showSupporters = function () {
-    return db.query(
-        `SELECT * FROM users`
-    ).then((results) => {
-        return results.rows;
-    })
+    return db
+        .query(
+            `SELECT * FROM users
+                    JOIN signatures
+                    ON users.id = signatures.id
+                    LEFT OUTER JOIN profile
+                    ON users.id = profile.id
+                    `
+        )
+        .then((results) => {
+            // console.log('results of showSupporters', results.rows);
+            return results.rows;
+        });
+}
+
+module.exports.showSupportersCity = function (city) {
+    return db
+        .query(
+            `SELECT * FROM users
+                    JOIN signatures
+                    ON users.id = signatures.id
+                    LEFT OUTER JOIN profile
+                    ON users.id = profile.id
+                    WHERE profile.city = $1
+                    `,[city]
+        )
+        .then((results) => {
+            console.log('results of showSupportersCity db query', results.rows);
+            return results.rows;
+        });
 }
 
 
