@@ -23,13 +23,85 @@ module.exports.insertUser = (firstName, lastName, email, password) => {
         });
 }
 
-module.exports.insertProfile = (id, age, city, userUrl) => {
+
+module.exports.getProfile = (id) => {
+    
+    return Promise.all([
+        db.query(
+            `
+            SELECT * FROM users
+            WHERE id = $1`,
+            [id]
+        ),
+        db.query(
+            `
+            SELECT * FROM profile
+            WHERE id = $1`,
+            [id]
+        )
+    ]).then((results) => {
+        
+        // console.log(results[0].rows);
+        // console.log(results[1].rows);
+        return results;
+    });
+};
+
+
+
+module.exports.updateProfile = (id, firstName, lastName, email, age, city, url, password) => {
+    console.log(id, firstName, lastName, email, age, city, url, password);
+    return Promise.all([
+
+        db.query(
+            `
+            INSERT INTO profile (id, age, city, userurl)
+                VALUES ($1, $2, $3, $4)
+            ON CONFLICT (id) DO 
+                UPDATE SET age=$2, city=$3, userurl=$4 WHERE profile.id=$1`,
+            [id, age, city, url]
+        ),
+        db.query(
+            `
+            UPDATE users SET first=$2, last=$3, email=$4 WHERE id=$1
+            `,
+            [id, firstName, lastName, email]
+        ),
+        new Promise((resolve, reject) => {
+            if(password != ""){
+                hashPassword(password)
+                    .then((password) => {
+                        resolve (db.query(
+                            `
+                                UPDATE users SET password=$2 WHERE id=$1
+                                `,
+                                [id, password]
+                            ));
+                        reject(new Error ("Error while updating password")) 
+                    })
+            } else {
+                resolve(true);
+            }
+        })
+        
+        
+
+    ])
+        .then((results) => {
+            return results;
+        })
+};
+
+module.exports.insertProfile = (id, age, city, url) => {
+    console.log(id, age, city, url);
     return db.query(
-        `
-        INSERT INTO profile (id, age, city, userurl)
-            VALUES ($1, $2, $3, $4)`,
-        [id, age, city, userUrl]
-    )};
+            `
+            INSERT INTO profile (id, age, city, userurl)
+                VALUES ($1, $2, $3, $4)
+            `,
+            [id, age, city, url]
+        );
+};
 
 
 
@@ -77,7 +149,17 @@ module.exports.checkSignature = (id) => {
             return false;
         }
     })
-}
+};
+
+module.exports.deleteSignature = (id) => {
+    return db
+        .query(
+            `
+            DELETE FROM signatures WHERE id = $1 
+            `,
+            [id]
+        );
+};
 
 module.exports.showSigner = (id) => {
     let tempResult;

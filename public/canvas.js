@@ -1,4 +1,5 @@
 $(document).ready(createCanvas); 
+$(".deleteCanvas").on("mouseUp", createCanvas.stopRecordingSignature);
 
 function createCanvas() {
     let sigMissing = $(".signature").data("error");
@@ -85,6 +86,15 @@ function createCanvas() {
     // Stop the recording of the signature and convert to URL
 
     function stopRecordingSignature(event) {
+        if($(event.target).hasClass("deleteCanvas")){
+            console.log($("canvas"));
+            // ctx.beginPath();
+            ctx.clearRect(0, 0, $("canvas")[0].width, $("canvas")[0].height);
+            // ctx.stroke();
+            $("#signatureURL").val(null);
+        };
+
+        
         if (mouseIsDown) {
             mouseIsDown = false;
             canvasURL = sigField[0].toDataURL();

@@ -1,0 +1,36 @@
+
+<h1>No more public transport jungle!</h1>
+<h2>If you would like, feel free to add some additional information about you!</h2>
+<form method="POST" class="petition-form">
+    <label for="firstName" class="formLabel bold">First Name:</label>
+    <input type="text" name="firstName" id="firstName" {{#if updateFailed}}{{#if first}}value="{{first}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    
+    <label for="lastName" class="formLabel bold">Last Name:</label>
+    <input type="text" name="lastName" id="lastName" {{#if updateFailed}}{{#if last}}value="{{last}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    
+    <label for="email" class="formLabel bold">E-Mail:</label>
+    <input type="email" name="email" id="email" {{#if updateFailed}}{{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    
+    <label for="password" class="formLabel bold">Password (leave empty, if you don't want to change it):</label>
+    <input type="password" name="password" id="password"/>
+    
+    <label for="age" class="formLabel bold">Your age:</label>
+    <input type="number" name="age" id="age" {{#if updateFailed}}{{#if age}}value="{{age}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    
+    <label for="city" class="formLabel bold">City:</label>
+    <input type="text" name="city" id="city" {{#if updateFailed}}{{#if city}}value="{{city}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    
+    <label for="userUrl" class="formLabel bold">Your website:</label>
+    <input type="text" name="userUrl" id="userUrl" {{#if updateFailed}}{{#if userurl}}value="{{userurl}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    
+
+    <input type="submit" id="submitSignature" class="submit" value="Update"></input>
+</form>
+    <form action="/delete-signature" method="POST" class="petition-form">
+        <input type="submit" id="deleteSignature" class="" value="Delete signature from petition"></input>
+    </form>
+<script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+<script src=""></script>

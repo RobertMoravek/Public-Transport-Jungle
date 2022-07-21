@@ -13,6 +13,7 @@
     <div class="signature" data-error="{{#if signingFailed}}{{#if signatureURL}}{{else}}red-border{{/if}}{{/if}}">
         <label for="sigField" class="formlabel bold" id="label-for-canvas">Sign your name with your mouse or finger here:</label>
         {{!-- <canvas width="400" height="200" id="sigField" name="sigField" class="canvas {{#if signingFailed}}{{#if signatureURL}}{{signatureURL}}{{else}}red-border{{/if}}{{/if}}"></canvas> --}}
+        <p class="deleteCanvas">Delete Signature Field</p>
         <input type="submit" id="submitSignature" class="submit" value="SIGN NOW!"></input>
 
     </div>

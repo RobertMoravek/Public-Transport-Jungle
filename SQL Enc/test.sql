@@ -33,3 +33,10 @@ SELECT songs.name FROM songs
     -- Get more specific values
 
 
+
+
+UPDATE stats SET hp=8 WHERE pokemon_id=3;
+
+INSERT INTO stats (pokemon:id, hp) VALUES (7, 3)
+    ON CONFLICT (pokemon_id)
+    DO UPDATE SET hp=5 WHERE stats.pokemon_id=7;

@@ -61,8 +61,13 @@ h3 {
     font-size: 1.5rem;
 }
 
-form {
+.petition-form {
     padding: 1rem 0;
+}
+
+.small-form {
+    padding: 0;
+    margin: 0;
 }
 
 p {
@@ -78,7 +83,7 @@ p {
 }
 
 .formlabel {
-    padding-right: 1rem;
+    padding: 0.5rem 0rem;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -137,6 +142,11 @@ button {
     -webkit-box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2); 
     box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2);
     
+}
+
+.deleteCanvas {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 

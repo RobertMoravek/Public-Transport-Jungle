@@ -1,20 +1,14 @@
-let city = "   Berlin";
-function deleteSpacesFromBeginning(input) {
-    if (input.startsWith(" ")) {
-        console.log('if');
-        input = input.slice(1);
-        console.log('input after slice', input);
-        deleteSpacesFromBeginning(input);
-        return input;
-    } else {
-        console.log('else', input);
-        city = input;
+let first = "Robert";
+let last = "   Pobert";
 
+
+function trim(input) {
+    for (let i = 0; i < input.length; i++) {
+        input[i] = input[i].trim();
     }
+    return input;
 }
-deleteSpacesFromBeginning(city);
 
+[first, last] = trim([first, last]);
 
-    
-    console.log("city", city);
-
+console.log(first, last);

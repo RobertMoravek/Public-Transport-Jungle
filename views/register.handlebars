@@ -15,7 +15,7 @@
     <input type="text" name="lastName" id="lastName" {{#if registrationFailed}}{{#if lastName}}value="{{lastName}}" {{else}} class="red-border"{{/if}}{{/if}}/>
     <label for="email" class="formLabel bold">E-Mail:</label>
     <input type="email" name="email" id="email" {{#if registrationFailed}}{{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}{{/if}}/>
-    <label for="password" class="formLabel bold">Password:</label>
+    <label for="password" class="formLabel bold">Password (8 characters or longer):</label>
     <input type="password" name="password" id="password" {{#if registrationFailed}}{{#if password}}value="{{password}}" {{else}} class="red-border"{{/if}}{{/if}}/>
     <input type="submit" id="submitSignature" class="submit" value="REGISTER"></input>
 </form>
