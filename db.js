@@ -161,6 +161,35 @@ module.exports.deleteSignature = (id) => {
         );
 };
 
+module.exports.deleteAccount = (id) => {
+
+        return db.query(
+            `
+            DELETE FROM signatures WHERE id = $1 
+            `,
+            [id]
+        ).then(() => {
+            db.query(
+                `
+                DELETE FROM profile WHERE id = $1 
+                `,
+                [id]
+            )
+            
+        }).then(() => {
+            db.query(
+                `
+                DELETE FROM users WHERE id = $1 
+                `,
+                [id]
+            )
+        }).then((results) => {
+                return results;
+
+        })
+};
+
+
 module.exports.showSigner = (id) => {
     let tempResult;
     return db.query(

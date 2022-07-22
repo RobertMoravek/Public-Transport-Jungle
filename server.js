@@ -59,7 +59,7 @@ app.get("/register", (req, res) => {
         return;
     }
 
-    res.redirect("/thanks");
+    res.redirect("/petition");
     return;
 });
 
@@ -69,18 +69,18 @@ app.post("/register", (req, res) => {
 
         if (firstName && lastName && email && password.length > 7) {
             
-            [firstName, lastName, email] = trim([firstName, lastName, email])
+            [firstName, lastName, email] = trim([firstName, lastName, email]);
             
             db.insertUser(firstName, lastName, email, password)
                 .then((result) => {
                     req.session.userId = result;
                     db.checkSignature(result)
-                    .then((result) => {
+                        .then((result) => {
                             console.log(result);
                             req.session.signed = result;
                             res.redirect("/profile");
                             return;
-                    });
+                        });
                 })
                 .catch((err) => {
                     console.log("Error on database query:", err);
@@ -126,12 +126,12 @@ app.get("/login", (req, res) => {
             url: req.url,
             title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
         });
-        return
+        return;
     } else {
-        res.redirect("/thanks");
-        return
+        res.redirect("/petition");
+        return;
     }
-})
+});
 
 
 app.post("/login", (req, res) => {
@@ -149,7 +149,7 @@ app.post("/login", (req, res) => {
                                 req.session.signed = result;
                                 res.redirect("/petition");
                                 return;
-                            })
+                            });
                     } else {
                         res.render("login", {
                             loginFailed: true,
@@ -219,13 +219,13 @@ app.post("/profile", (req, res) => {
             age = undefined;
         }
 
-        [city, userUrl] = trim([city, userUrl])
+        [city, userUrl] = trim([city, userUrl]);
         console.log('city in post profile', city);
         
         if(userUrl != ""){
             if (!userUrl.startsWith("http://") || !userUrl.startsWith("https://")) {
                 userUrl = "https://" + userUrl;
-            };
+            }
         }
             
 
@@ -274,7 +274,7 @@ app.get("/edit-profile", (req, res) => {
                     title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
                     loggedin: req.session.userId,
                 });
-            })
+            });
         return;
     }
 
@@ -295,35 +295,35 @@ app.post("/edit-profile", (req, res) => {
         if(userUrl != ""){
             if (!userUrl.startsWith("http://") && !userUrl.startsWith("https://")) {
                 userUrl = "https://" + userUrl;
-            };
+            }
         }
         console.log(req.session.userId, firstName, lastName, email, age, city, userUrl, password);
         
         db.updateProfile(req.session.userId, firstName, lastName, email, age, city, userUrl, password)
             .then(() => {
-                    console.log('redirecting to petition');
-                    res.redirect("/petition");
-                    return;
-                })
+                console.log('redirecting to petition');
+                res.redirect("/petition");
+                return;
+            })
             .catch((err) => {
-                    console.log(err);
-                    res.render("edit-profile", {
-                        uupdateFailed: true,
-                        firstName,
-                        lastName,
-                        email,
-                        password,
-                        age,
-                        city,
-                        url: req.url,
-                        title:
+                console.log(err);
+                res.render("edit-profile", {
+                    uupdateFailed: true,
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    age,
+                    city,
+                    url: req.url,
+                    title:
                             req.url.slice(1, 2).toUpperCase() +
                             req.url.slice(2),
-                        loggedin: req.session.userId,
-                    });
+                    loggedin: req.session.userId,
+                });
 
 
-                    return;
+                return;
             });
         
 
@@ -340,7 +340,7 @@ app.get("/", (req, res) => {
     // res.sendStatus(301);
     res.redirect("/petition");
     return; 
-})
+});
 
 // Petition page
 
@@ -348,22 +348,22 @@ app.get("/petition", (req, res) => {
     
     if (req.session.userId) {
         db.checkSignature(req.session.userId)
-        .then((result) => {
+            .then((result) => {
             // console.log('result of checkSignature', result);
-            if (result) {
-                res.redirect("/thanks");
-                return;
-            } else {
-                console.log("trying to render petition");
-                res.render("petition", {
-                            url: req.url,
-                            title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-                            loggedin: req.session.userId
-                        });
-                        // Show petition sign page
-                return;
-            }
-        });
+                if (result) {
+                    res.redirect("/thanks");
+                    return;
+                } else {
+                    console.log("trying to render petition");
+                    res.render("petition", {
+                        url: req.url,
+                        title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+                        loggedin: req.session.userId
+                    });
+                    // Show petition sign page
+                    return;
+                }
+            });
 
         
     } else {
@@ -372,10 +372,10 @@ app.get("/petition", (req, res) => {
         
     }
 
-})
+});
 
 app.post("/petition", (req, res) => {
-    if (req.session.userId) {
+    if (req.session.userId && !req.session.signed) {
         let { signatureURL } = req.body;
         // console.log(req.body);
         // console.log(firstName, lastName, signatureURL);
@@ -401,8 +401,8 @@ app.post("/petition", (req, res) => {
             return;
         }
     } else {
-        res.redirect("/register");
-    };
+        res.redirect("/thanks");
+    }
 });
 
 
@@ -448,7 +448,7 @@ app.get("/supporters", (req, res) => {
                         item.city = item.city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
 
                     }
-                };
+                }
                 
                 res.render("supporters", {
                     supporters,
@@ -458,17 +458,17 @@ app.get("/supporters", (req, res) => {
                 });
             });
     } else {
-        res.redirect("/register");
+        res.redirect("/petition");
     }
     
-})
+});
 
 app.get("/logout", (req, res) => {
     req.session = undefined;
     
     res.redirect("../login");
     
-})
+});
 
 app.get("/supporters/:city", (req, res) => {
     if (!req.session.signed) {
@@ -480,16 +480,16 @@ app.get("/supporters/:city", (req, res) => {
         db.showSupportersCity(req.params.city)
             .then((supporters) => {
                 for (let item of supporters) {
-                item.cityLink = item.city.split(" ").join("-");
-                item.city = item.city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
-            };
+                    item.cityLink = item.city.split(" ").join("-");
+                    item.city = item.city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
+                }
                 res.render("supporterscity", {
                     supporters,
                     url:  "/supporters",
                     title: "Supporters from " + req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
                     loggedin: req.session.userId,
+                });
             });
-        })
     }
 });
 
@@ -499,14 +499,31 @@ app.post("/delete-signature", (req, res) => {
         return;
     } else {
         db.deleteSignature(req.session.userId)
-        .then(() => {
-            req.session.signed = false;
-            res.redirect("/petition");
-            return;
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+            .then(() => {
+                req.session.signed = false;
+                res.redirect("/petition");
+                return;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+});
+
+app.post("/delete-account", (req, res) => {
+    if (!req.session.userId) {
+        res.redirect("/login");
+        return;
+    } else {
+        db.deleteAccount(req.session.userId)
+            .then(() => {
+                req.session = undefined;
+                res.redirect("/petition");
+                return;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 });
 
@@ -520,4 +537,8 @@ function trim(input) {
 }
 
 
-app.listen(8080, () => {console.log('Petition Server is listening on 8080');})
+if (require.main == module) {
+    app.listen(process.env.PORT || 8080);
+}
+
+module.exports = app;

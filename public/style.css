@@ -55,6 +55,7 @@ h2 {
     padding: 1rem 0;
     font-size: 1.5rem;
     text-align: justify;
+    align-self: baseline;
 }
 
 h3 {
@@ -95,14 +96,19 @@ input {
 
 .submit,
 .cta-button {
-    margin: 2rem 0;
-    font-size: 1.5rem;
-    padding: 1rem;
     border: 3px solid black;
+    align-self: flex-start;
+    padding: 0.5rem 1rem;
+    margin-top: 2rem;
     -webkit-box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2); 
     box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2);
-    cursor: pointer;
+    font-family: "Bebas Neue", cursive;
+    background-color: rgba(255, 255, 255, 0.95);
 
+}
+
+.no-margin{
+    margin: 0;
 }
 
 span {
@@ -138,11 +144,22 @@ button {
     border: 3px solid black;
     align-self: flex-end;
     padding: 0.5rem 1rem;
-    margin-bottom: 2rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
     -webkit-box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2); 
     box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2);
-    
 }
+
+    .menu {
+    width: 100%;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+
 
 .deleteCanvas {
     text-decoration: underline;
@@ -161,7 +178,7 @@ button {
     }
 
     body {
-        width: 100vw;
+        width: 100%;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -183,8 +200,9 @@ button {
         box-shadow: 0px 0px 19px 7px rgba(0, 0, 0, 0.74);
         display: flex;
         flex-direction: column;
-        align-items: center;
     }
+
+
 }
     
 @media screen and (max-width: 799px) {
@@ -197,7 +215,7 @@ button {
     }
 
     body {
-        width: 100vw;
+        width: 100%;
         min-height: 100vh;
         min-width:400px;
         display: flex;
@@ -214,7 +232,7 @@ button {
         max-width: 95%;
 
         background-color: rgba(255, 255, 255, 0.95);
-        padding: 4rem;
+        padding: 3rem;
         margin: 2rem;
         -webkit-box-shadow: 0px 0px 19px 7px rgba(0, 0, 0, 0.74);
         box-shadow: 0px 0px 19px 7px rgba(0, 0, 0, 0.74);
@@ -222,6 +240,8 @@ button {
         flex-direction: column;
         align-items: center;
     }
+
+
 
     
 }

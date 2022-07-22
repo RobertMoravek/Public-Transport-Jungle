@@ -1,6 +1,16 @@
 
 <h1>No more public transport jungle!</h1>
-<h2>If you would like, feel free to add some additional information about you!</h2>
+
+<form action="/delete-signature" method="POST" class="petition-form">
+        <input type="submit" id="deleteSignature" class="cta-button no-margin" value="Delete my signature!"></input>
+</form>
+
+<form action="/delete-account" method="POST" class="petition-form">
+        <input type="submit" id="deleteProfile" class="cta-button no-margin" value="Delete my account!"></input>
+</form>
+
+<h2>Feel free to add some additional information about yourself!</h2>
+
 <form method="POST" class="petition-form">
     <label for="firstName" class="formLabel bold">First Name:</label>
     <input type="text" name="firstName" id="firstName" {{#if updateFailed}}{{#if first}}value="{{first}}" {{else}} class="red-border"{{/if}}{{/if}}/>
@@ -26,9 +36,8 @@
 
     <input type="submit" id="submitSignature" class="submit" value="Update"></input>
 </form>
-    <form action="/delete-signature" method="POST" class="petition-form">
-        <input type="submit" id="deleteSignature" class="" value="Delete signature from petition"></input>
-    </form>
+
+
 <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="

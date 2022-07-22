@@ -13,7 +13,14 @@
     <body background="..{{url}}-bg.jpg">
        <div class="container">
        {{#if register}}<a href="../login" class="login">LOG IN</a>{{/if}}
-       {{#if loggedin}}<a href="../logout" class="login">LOG OUT</a>{{/if}}
+       {{#if loggedin}}
+            <div class="menu">
+                <a href="../thanks" class="login">MY SIGNATURE</a>
+                <a href="../supporters" class="login">SUPPORTERS</a>
+                <a href="../edit-profile" class="login">EDIT PROFILE</a>
+                <a href="../logout" class="login">LOG OUT</a>
+            </div>
+        {{/if}}
 
         {{{body}}}
 
