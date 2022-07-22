@@ -20,7 +20,7 @@ CREATE TABLE profile (
      id INTEGER PRIMARY KEY NOT NULL REFERENCES users(id),
      age INTEGER,
      city VARCHAR,
-     url VARCHAR
+     userurl VARCHAR
 );
 
 

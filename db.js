@@ -60,7 +60,7 @@ module.exports.getProfile = (id) => {
 
 
 module.exports.updateProfile = (id, firstName, lastName, email, age, city, url, password) => {
-    console.log(id, firstName, lastName, email, age, city, url, password);
+    // console.log(id, firstName, lastName, email, age, city, url, password);
     return Promise.all([
 
         db.query(
@@ -103,7 +103,7 @@ module.exports.updateProfile = (id, firstName, lastName, email, age, city, url, 
 };
 
 module.exports.insertProfile = (id, age, city, url) => {
-    console.log(id, age, city, url);
+    // console.log(id, age, city, url);
     return db.query(
         `
             INSERT INTO profile (id, age, city, userurl)
@@ -128,9 +128,9 @@ module.exports.loginUser = (email, password) => {
             return comparePasswords(password, result.rows[0].password);
         })
         .then((result) => {
-            console.log("result2", result);
+            // console.log("result2", result);
             if(result){
-                console.log("result.rows[0].id", temp.rows[0].id);
+                // console.log("result.rows[0].id", temp.rows[0].id);
                 return temp.rows[0].id;
             } else {
                 return null;
@@ -250,7 +250,7 @@ module.exports.showSupportersCity = function (city) {
                     `,[city]
         )
         .then((results) => {
-            console.log('results of showSupportersCity db query', results.rows);
+            // console.log('results of showSupportersCity db query', results.rows);
             return results.rows;
         });
 };
@@ -273,7 +273,7 @@ function hashPassword(password) {
 function comparePasswords(password, hash) {
     return bcrypt.compare(password, hash)
         .then((result) => {
-            console.log(result);
+            // console.log(result);
             return result;
         });
 }
