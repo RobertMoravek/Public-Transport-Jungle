@@ -1,10 +1,13 @@
 const spicedPg = require("spiced-pg");
-const db = spicedPg("postgres:postgres:postgres@localhost:5432/robert");
 const bcrypt = require("bcryptjs");
+const {user, password, database} = require("./secrets.json");
+
+const dbUrl = process.env.DATABASE_URL || `postgres:${user}:${password}@localhost:5432/${database}`;
+const db = spicedPg(dbUrl);
 
 module.exports.getNumOfSigners = () => {
-    return db.query(`SELECT COUNT(*) FROM signatures`)
-}
+    return db.query(`SELECT COUNT(*) FROM signatures`);
+};
 
 module.exports.insertUser = (firstName, lastName, email, password) => {
     return hashPassword(password)
@@ -21,7 +24,7 @@ module.exports.insertUser = (firstName, lastName, email, password) => {
                 });
 
         });
-}
+};
 
 
 module.exports.getProfile = (id) => {
@@ -75,10 +78,10 @@ module.exports.updateProfile = (id, firstName, lastName, email, age, city, url, 
                             `
                                 UPDATE users SET password=$2 WHERE id=$1
                                 `,
-                                [id, password]
-                            ));
-                        reject(new Error ("Error while updating password")) 
-                    })
+                            [id, password]
+                        ));
+                        reject(new Error ("Error while updating password")); 
+                    });
             } else {
                 resolve(true);
             }
@@ -89,18 +92,18 @@ module.exports.updateProfile = (id, firstName, lastName, email, age, city, url, 
     ])
         .then((results) => {
             return results;
-        })
+        });
 };
 
 module.exports.insertProfile = (id, age, city, url) => {
     console.log(id, age, city, url);
     return db.query(
-            `
+        `
             INSERT INTO profile (id, age, city, userurl)
                 VALUES ($1, $2, $3, $4)
             `,
-            [id, age, city, url]
-        );
+        [id, age, city, url]
+    );
 };
 
 
@@ -108,38 +111,38 @@ module.exports.insertProfile = (id, age, city, url) => {
 module.exports.loginUser = (email, password) => {
     let temp = null;
     return db.query(
-                `
+        `
                 SELECT * FROM users WHERE email = $1`,
-                [email]
-            )
-                .then((result) => {
-                    temp = result;
-                    // console.log("result", result)
-                    return comparePasswords(password, result.rows[0].password)
-                })
-                .then((result) => {
-                    console.log("result2", result);
-                    if(result){
-                        console.log("result.rows[0].id", temp.rows[0].id);
-                        return temp.rows[0].id;
-                    } else {
-                        return null;
-                    }
-                })
-}
+        [email]
+    )
+        .then((result) => {
+            temp = result;
+            // console.log("result", result)
+            return comparePasswords(password, result.rows[0].password);
+        })
+        .then((result) => {
+            console.log("result2", result);
+            if(result){
+                console.log("result.rows[0].id", temp.rows[0].id);
+                return temp.rows[0].id;
+            } else {
+                return null;
+            }
+        });
+};
 
 module.exports.addSignature = (id, signature) => {
     return db.query(
-                `
+        `
                 INSERT INTO signatures (id, signature)
                     VALUES ($1, $2)`,
-                [id, signature]
-            );
+        [id, signature]
+    );
 };
 
 module.exports.checkSignature = (id) => {
     return db.query(
-            `
+        `
             SELECT signature FROM signatures WHERE id = $1 
             `, [id]
     ).then((result) => {
@@ -148,7 +151,7 @@ module.exports.checkSignature = (id) => {
         } else {
             return false;
         }
-    })
+    });
 };
 
 module.exports.deleteSignature = (id) => {
@@ -163,30 +166,30 @@ module.exports.deleteSignature = (id) => {
 
 module.exports.deleteAccount = (id) => {
 
-        return db.query(
-            `
+    return db.query(
+        `
             DELETE FROM signatures WHERE id = $1 
             `,
-            [id]
-        ).then(() => {
-            db.query(
-                `
+        [id]
+    ).then(() => {
+        db.query(
+            `
                 DELETE FROM profile WHERE id = $1 
                 `,
-                [id]
-            )
+            [id]
+        );
             
-        }).then(() => {
-            db.query(
-                `
+    }).then(() => {
+        db.query(
+            `
                 DELETE FROM users WHERE id = $1 
                 `,
-                [id]
-            )
-        }).then((results) => {
-                return results;
+            [id]
+        );
+    }).then((results) => {
+        return results;
 
-        })
+    });
 };
 
 
@@ -200,16 +203,16 @@ module.exports.showSigner = (id) => {
         .then((result) => {
             tempResult = result.rows[0];
             return (db.query(
-        `
+                `
         SELECT * FROM signatures
-            WHERE id = $1`, [id]))
+            WHERE id = $1`, [id]));
 
         })
         .then ((result) => {
             // console.log("result1, result2", tempResult, result.rows[0]);
 
             return [tempResult, result.rows[0]];
-        })
+        });
 };  
 
 module.exports.showSupporters = function () {
@@ -226,7 +229,7 @@ module.exports.showSupporters = function () {
             // console.log('results of showSupporters', results.rows);
             return results.rows;
         });
-}
+};
 
 module.exports.showSupportersCity = function (city) {
     return db
@@ -243,7 +246,7 @@ module.exports.showSupportersCity = function (city) {
             console.log('results of showSupportersCity db query', results.rows);
             return results.rows;
         });
-}
+};
 
 
 function hashPassword(password) {
@@ -262,8 +265,8 @@ function hashPassword(password) {
 
 function comparePasswords(password, hash) {
     return bcrypt.compare(password, hash)
-    .then((result) => {
-        console.log(result);
-        return result
-    })
+        .then((result) => {
+            console.log(result);
+            return result;
+        });
 }

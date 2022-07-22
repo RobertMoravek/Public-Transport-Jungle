@@ -5,13 +5,20 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 
 // -> Cookie Stuff
+let sessionSecret = process.env.SESSION_SECRET;
+
+if (!sessionSecret) {
+    sessionSecret = require("./secrets.json").SESSION_SECRET;
+}
+
+
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 const cookieSession = require("cookie-session");
 app.use(
     cookieSession({
-        secret: `Better run through the jungle!`,
+        secret: sessionSecret,
         maxAge: undefined,
     })
 );
@@ -37,7 +44,14 @@ const db = require("./db.js");
 
 // USE HTTPS
 
-
+if (process.env.NODE_ENV == "production") {
+    app.use((req, res, next) => {
+        if (req.headers["x-forwarded-proto"].startsWith("https")) {
+            return next();
+        }
+        res.redirect(`https://${req.hostname}${req.url}`);
+    });
+}
 
 
 
