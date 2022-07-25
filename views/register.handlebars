@@ -5,7 +5,7 @@
     public transport networks.</span></p>
 <p>We demand the <span class="bold"> abolition of the regional transport networks</span> and propose the
     introduction of <span class="bold">ONE big national public transport network.</span></p>
-<p>With just <span class="bold">ONE "Monatsticket"</span> you should be able to take <span class="bold">ANY region train,
+<p>With just <span class="bold">ONE "Monatsticket"</span> you should be able to take <span class="bold">ANY regionanl train,
     tram, subway, bus or commmuter-ferry in the entire country.</span></p>
 <h2>Do you agree? Then register to sign our petition now!</h2>
 <form method="POST" class="petition-form">
@@ -14,12 +14,13 @@
     <label for="lastName" class="formLabel bold">Last Name:</label>
     <input type="text" name="lastName" id="lastName" {{#if registrationFailed}}{{#if lastName}}value="{{lastName}}" {{else}} class="red-border"{{/if}}{{/if}}/>
     <label for="email" class="formLabel bold">E-Mail:</label>
-    <input type="email" name="email" id="email" {{#if registrationFailed}}{{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    <input type="email" name="email" id="email" {{#if registrationFailed}}{{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}{{/if}}{{#if emailExists}}class="red-border"{{/if}}/>
+    {{#if emailExists}}<p class="red bold">This E-Mail is already registered!</p>{{/if}}
     <label for="password" class="formLabel bold">Password (8 characters or longer):</label>
     <input type="password" name="password" id="password" {{#if registrationFailed}}{{#if password}}value="{{password}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+{{#if registrationFailed}}<p class="red bold">You have not filled in all the required fields. Please check again and resubmit!</p>{{/if}}
     <input type="submit" id="submitSignature" class="submit" value="REGISTER"></input>
 </form>
-{{#if registrationFailed}}<p class="red bold">You have not filled in all the required fields. Please check again and resubmit!</p>{{/if}}
 <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="

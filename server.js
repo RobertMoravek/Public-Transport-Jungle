@@ -97,8 +97,13 @@ app.post("/register", (req, res) => {
                         });
                 })
                 .catch((err) => {
+                    let emailExists;
+                    if (err.code == "23505"){
+                        emailExists = true;
+                    }
                     console.log("Error on database query:", err);
                     res.render("register", {
+                        emailExists,
                         register: true,
                         registrationFailed: true,
                         firstName,
@@ -337,7 +342,12 @@ app.post("/edit-profile", (req, res) => {
             })
             .catch((err) => {
                 console.log(err);
+                let emailExists;
+                if (err.code == "23505") {
+                    emailExists = true;
+                }
                 res.render("edit-profile", {
+                    emailExists,
                     profile: true,
                     signature: req.session.signed,
                     updateFailed: true,

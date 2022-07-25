@@ -5,7 +5,7 @@
     public transport networks.</span></p>
 <p>We demand the <span class="bold"> abolition of the regional transport networks</span> and propose the
     introduction of <span class="bold">ONE big national public transport network.</span></p>
-<p>With just <span class="bold">ONE "Monatsticket"</span> you should be able to take <span class="bold">ANY region train,
+<p>With just <span class="bold">ONE "Monatsticket"</span> you should be able to take <span class="bold">ANY regional train,
     tram, subway, bus or commmuter-ferry in the entire country.</span></p>
 <h2>Do you agree? Then sign our petition!</h2>
 <form method="POST" class="petition-form">
@@ -14,13 +14,13 @@
         <label for="sigField" class="formlabel bold" id="label-for-canvas">Sign your name with your mouse or finger here:</label>
         {{!-- <canvas id="sigField" name="sigField" class="canvas {{#if signingFailed}}{{#if signatureURL}}{{signatureURL}}{{else}}red-border{{/if}}{{/if}}"></canvas> --}}
         <p class="deleteCanvas">Delete Signature Field</p>
+{{#if signingFailed}}<p class="red bold">You have not filled in all the required fields. Please check again and resubmit!</p>{{/if}}
         <input type="submit" id="submitSignature" class="submit" value="SIGN NOW!"></input>
 
     </div>
 </form>
-{{#if signingFailed}}<p class="red bold">You have not filled in all the required fields. Please check again and resubmit!</p>{{/if}}
 <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     crossorigin="anonymous"></script>
-<script src="./canvas.js"></script>
+<script src="./canvas2.js"></script>

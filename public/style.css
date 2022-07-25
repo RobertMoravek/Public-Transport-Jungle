@@ -26,13 +26,17 @@
     border: dashed black 3px;
     margin: 1rem 0;
     touch-action: none;
+    align-self: flex-start;
 }
 
 .invisible {
     display: none;
 }
 
+
+
 .red {
+    margin-top: 1rem;
     color: rgb(211, 0, 0);
 }
 
@@ -78,9 +82,11 @@ p {
 }
 
 .signature {
-    margin-top: 2rem;
+    margin-top: 1rem;
+
     display: flex;
     flex-direction: column;
+    
 }
 
 .formlabel {
@@ -104,6 +110,20 @@ input {
     box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2);
     font-family: "Bebas Neue", cursive;
     background-color: rgba(255, 255, 255, 0.95);
+    cursor: pointer;
+
+}
+
+.option-button {
+    border: 3px solid black;
+    align-self: flex-start;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    -webkit-box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2); 
+    box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2);
+    font-family: "Bebas Neue", cursive;
+    background-color: rgba(255, 255, 255, 0.95);
+    cursor: pointer;
 
 }
 
@@ -138,17 +158,22 @@ button {
 .petition-form {
     display: flex;
     flex-direction: column;
+    margin: 0;
+    padding: 0;
 }
 
 .login {
     border: 3px solid black;
     align-self: flex-end;
     padding: 0.5rem 1rem;
-    margin-left: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     margin-bottom: 1rem;
     -webkit-box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2); 
     box-shadow: 5px 5px 8px 0px rgba(0,0,0,0.2);
 }
+
+
 
     .menu {
     width: 100%;
@@ -166,9 +191,11 @@ button {
     cursor: pointer;
 }
 
+.grey {
+    background-color: rgb(235, 235, 235);
+}
 
-
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 880px) {
     * {
         margin: 0;
         padding: 0;
@@ -205,7 +232,7 @@ button {
 
 }
     
-@media screen and (max-width: 799px) {
+@media screen and (max-width: 879px) {
     * {
         margin: 0;
         padding: 0;
@@ -232,7 +259,7 @@ button {
         max-width: 95%;
 
         background-color: rgba(255, 255, 255, 0.95);
-        padding: 3rem;
+        padding: 2rem;
         margin: 2rem;
         -webkit-box-shadow: 0px 0px 19px 7px rgba(0, 0, 0, 0.74);
         box-shadow: 0px 0px 19px 7px rgba(0, 0, 0, 0.74);

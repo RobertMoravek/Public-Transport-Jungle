@@ -24,11 +24,7 @@ module.exports.insertUser = (firstName, lastName, email, password) => {
                 INSERT INTO users (first, last, email, password)
                     VALUES ($1, $2, $3, $4) RETURNING id`,
                 [firstName, lastName, email, result]
-            )
-                .then((result) => {
-                    // console.log('result.rows[0]', result.rows[0].id);
-                    return result.rows[0].id;
-                });
+            );
 
         });
 };
