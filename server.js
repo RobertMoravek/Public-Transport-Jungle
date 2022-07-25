@@ -276,9 +276,14 @@ app.get("/edit-profile", (req, res) => {
                 let {first, last, email} = result[0].rows[0];
                 let {age, city, userurl} = result[1].rows[0];
                 // console.log(result[1]);
-                city = city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
+                if(city){
+                    city = city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
+                }
                 // console.log(first, last, email, age, city, userurl);
+
                 res.render("edit-profile", {
+                    signature: req.session.signed,
+                    profile: true,
                     first,
                     last,
                     email,
@@ -289,8 +294,12 @@ app.get("/edit-profile", (req, res) => {
                     title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
                     loggedin: req.session.userId,
                 });
-            }).catch(() => {
+            }).catch((err) => {
+                console.log(err);
+
                 res.render("edit-profile", {
+                    signature: req.session.signed,
+                    profile: true,
                     url: req.url,
                     title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
                     loggedin: req.session.userId,
@@ -307,7 +316,7 @@ app.post("/edit-profile", (req, res) => {
     if (req.session.userId) {
         let { firstName, lastName, email, password, age, city, userUrl } = req.body;
         if (age == ""){
-            age = undefined;
+            age = null;
         }
         
         [firstName, lastName, email, city, userUrl] = trim([firstName, lastName, email, city, userUrl]);
@@ -329,9 +338,11 @@ app.post("/edit-profile", (req, res) => {
             .catch((err) => {
                 console.log(err);
                 res.render("edit-profile", {
-                    uupdateFailed: true,
-                    firstName,
-                    lastName,
+                    profile: true,
+                    signature: req.session.signed,
+                    updateFailed: true,
+                    first: firstName,
+                    last: lastName,
                     email,
                     password,
                     age,
@@ -377,6 +388,8 @@ app.get("/petition", (req, res) => {
                 } else {
                     console.log("trying to render petition");
                     res.render("petition", {
+                        profile: true, 
+                        signature: req.session.signed,
                         url: req.url,
                         title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
                         loggedin: req.session.userId
@@ -412,7 +425,9 @@ app.post("/petition", (req, res) => {
                     return;
                 });
         } else {
+            
             res.render("petition", {
+                profile: true,
                 signingFailed: true,
                 signatureURL,
                 url: req.url,
@@ -436,6 +451,7 @@ app.get("/thanks", (req, res) => {
                 // console.log('resultUser, resultSignature', resultUser, resultSignature);
                 db.getNumOfSigners().then((result) => {
                     res.render("thanks", {
+                        profile: true,
                         first: resultUser.first,
                         last: resultUser.last,
                         signature: resultSignature.signature,
@@ -472,6 +488,8 @@ app.get("/supporters", (req, res) => {
                 }
                 
                 res.render("supporters", {
+                    signature: true,
+                    profile: true,
                     supporters,
                     url: req.url,
                     title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
@@ -505,6 +523,8 @@ app.get("/supporters/:city", (req, res) => {
                     item.city = item.city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
                 }
                 res.render("supporterscity", {
+                    signature: true,
+                    profile: true,
                     supporters,
                     url:  "/supporters",
                     title: "Supporters from " + req.url.slice(1, 2).toUpperCase() + req.url.slice(2),

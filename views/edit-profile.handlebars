@@ -13,25 +13,25 @@
 
 <form method="POST" class="petition-form">
     <label for="firstName" class="formLabel bold">First Name:</label>
-    <input type="text" name="firstName" id="firstName" {{#if updateFailed}}{{#if first}}value="{{first}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    <input type="text" name="firstName" id="firstName" {{#if first}}value="{{first}}"{{else}}class="red-border"{{/if}}/>
     
     <label for="lastName" class="formLabel bold">Last Name:</label>
-    <input type="text" name="lastName" id="lastName" {{#if updateFailed}}{{#if last}}value="{{last}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    <input type="text" name="lastName" id="lastName" {{#if last}}value="{{last}}" {{else}}class="red-border"{{/if}}/>
     
     <label for="email" class="formLabel bold">E-Mail:</label>
-    <input type="email" name="email" id="email" {{#if updateFailed}}{{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    <input type="email" name="email" id="email" {{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}/>
     
     <label for="password" class="formLabel bold">Password (leave empty, if you don't want to change it):</label>
     <input type="password" name="password" id="password"/>
     
     <label for="age" class="formLabel bold">Your age:</label>
-    <input type="number" name="age" id="age" {{#if updateFailed}}{{#if age}}value="{{age}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    <input type="number" min="18" max="130" name="age" id="age" {{#if age}}value="{{age}}" {{/if}}/>
     
     <label for="city" class="formLabel bold">City:</label>
-    <input type="text" name="city" id="city" {{#if updateFailed}}{{#if city}}value="{{city}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    <input type="text" name="city" id="city" {{#if city}}value="{{city}}" {{/if}}/>
     
     <label for="userUrl" class="formLabel bold">Your website:</label>
-    <input type="text" name="userUrl" id="userUrl" {{#if updateFailed}}{{#if userurl}}value="{{userurl}}" {{else}} class="red-border"{{/if}}{{/if}}/>
+    <input type="text" name="userUrl" id="userUrl" {{#if userurl}}value="{{userurl}}" {{/if}}/>
     
 
     <input type="submit" id="submitSignature" class="submit" value="Update"></input>

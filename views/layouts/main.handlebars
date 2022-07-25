@@ -15,9 +15,9 @@
        {{#if register}}<a href="../login" class="login">LOG IN</a>{{/if}}
        {{#if loggedin}}
             <div class="menu">
-                <a href="../thanks" class="login">MY SIGNATURE</a>
-                <a href="../supporters" class="login">SUPPORTERS</a>
-                <a href="../edit-profile" class="login">EDIT PROFILE</a>
+                {{#if signature}}<a href="../thanks" class="login">MY SIGNATURE</a>{{/if}}
+                {{#if signature}}<a href="../supporters" class="login">SUPPORTERS</a>{{/if}}
+                {{#if profile}}<a href="../edit-profile" class="login">EDIT PROFILE</a>{{/if}}
                 <a href="../logout" class="login">LOG OUT</a>
             </div>
         {{/if}}
