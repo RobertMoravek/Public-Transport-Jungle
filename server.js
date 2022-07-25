@@ -87,14 +87,15 @@ app.post("/register", (req, res) => {
             
             db.insertUser(firstName, lastName, email, password)
                 .then((result) => {
-                    req.session.userId = result;
-                    db.checkSignature(result)
-                        .then((result) => {
-                            // console.log(result);
-                            req.session.signed = result;
-                            res.redirect("/profile");
-                            return;
-                        });
+                    console.log(result.rows[0].id);
+                    req.session.userId = result.rows[0].id;
+                    
+                    
+                    // console.log(result);
+                    req.session.signed = false;
+                    res.redirect("/profile");
+                    return;
+                       
                 })
                 .catch((err) => {
                     let emailExists;

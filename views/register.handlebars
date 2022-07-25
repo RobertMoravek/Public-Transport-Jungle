@@ -20,6 +20,7 @@
     <input type="password" name="password" id="password" {{#if registrationFailed}}{{#if password}}value="{{password}}" {{else}} class="red-border"{{/if}}{{/if}}/>
 {{#if registrationFailed}}<p class="red bold">You have not filled in all the required fields. Please check again and resubmit!</p>{{/if}}
     <input type="submit" id="submitSignature" class="submit" value="REGISTER"></input>
+    {{!-- <button class="option-button">REGISTER!</button> --}}
 </form>
 <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
