@@ -2,6 +2,12 @@ $(document).ready(createCanvas);
 $(".deleteCanvas").on("mouseUp", createCanvas.stopRecordingSignature);
 
 function createCanvas() {
+    
+    $("#sigField").off("mousedown").off("touchstart");
+    $(document).off("mousemove").off("touchmove");
+    $(document).off("mouseup").off("touchend");
+    
+    
     let sigMissing = $(".signature").data("error");
     // if ($(".signature").data() == "red-border"){
     //     console.log('hurra');
@@ -36,6 +42,7 @@ function createCanvas() {
     // Start the tracking process
 
     function startTracking(event) {
+        event.preventDefault();
         console.log(event.changedTouches);
         if (!event.changedTouches) {
             mouseXStart = event.pageX - sigFieldOffsetX;
@@ -65,6 +72,7 @@ function createCanvas() {
 
     // Record the signature
     function recordSignature(event) {
+        event.preventDefault();
         if (mouseIsDown && !event.changedTouches) {
             let mouseXCurr = event.pageX - sigFieldOffsetX;
             let mouseYCurr = event.pageY - sigFieldOffsetY;
@@ -86,13 +94,14 @@ function createCanvas() {
     // Stop the recording of the signature and convert to URL
 
     function stopRecordingSignature(event) {
+        event.preventDefault();
         if($(event.target).hasClass("deleteCanvas")){
             console.log($("canvas"));
             // ctx.beginPath();
             ctx.clearRect(0, 0, $("canvas")[0].width, $("canvas")[0].height);
             // ctx.stroke();
             $("#signatureURL").val(null);
-        };
+        }
 
         
         if (mouseIsDown) {

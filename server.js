@@ -99,6 +99,7 @@ app.post("/register", (req, res) => {
                 .catch((err) => {
                     console.log("Error on database query:", err);
                     res.render("register", {
+                        register: true,
                         registrationFailed: true,
                         firstName,
                         lastName,
@@ -114,6 +115,7 @@ app.post("/register", (req, res) => {
                 });
         } else {
             res.render("register", {
+                register: true,
                 registrationFailed: true,
                 firstName,
                 lastName,
@@ -121,7 +123,7 @@ app.post("/register", (req, res) => {
                 password,
                 url: req.url,
                 title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
-                loggedin: req.session.userId
+                loggedin: req.session.userId,
             });
             return;
         }
@@ -277,13 +279,18 @@ app.get("/edit-profile", (req, res) => {
                 city = city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
                 // console.log(first, last, email, age, city, userurl);
                 res.render("edit-profile", {
-                    updateFailed: true,
                     first,
                     last,
                     email,
                     age,
                     city,
                     userurl,
+                    url: req.url,
+                    title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
+                    loggedin: req.session.userId,
+                });
+            }).catch(() => {
+                res.render("edit-profile", {
                     url: req.url,
                     title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
                     loggedin: req.session.userId,
