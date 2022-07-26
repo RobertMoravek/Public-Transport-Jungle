@@ -490,9 +490,9 @@ app.get("/supporters", (req, res) => {
             .then((supporters) => {
                 // console.log("Supporters: ",supporters)
                 for (let item of supporters) {
-                    if ('city' in item){
+                    if (item.city != ""){
                         item.cityLink = item.city.split(" ").join("-");
-                        // console.log(item.city);
+                        console.log(item);
                         item.city = item.city.split(" ").map(word => word[0].toUpperCase() + word.substring(1)).join(" ");
 
                     }
