@@ -582,6 +582,10 @@ app.post("/delete-account", (req, res) => {
     }
 });
 
+app.get("*", (req, res) => {
+    res.redirect("/petition");
+});
+
 function trim(input) {
     // console.log('I am trimming');
     for (let i = 0; i < input.length; i++) {
