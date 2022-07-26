@@ -486,7 +486,7 @@ app.get("/thanks", (req, res) => {
 
 app.get("/supporters", (req, res) => {
     if (req.session.signed) {
-        let supporters = db.showSupporters()
+        db.showSupporters()
             .then((supporters) => {
                 // console.log("Supporters: ",supporters)
                 for (let item of supporters) {
