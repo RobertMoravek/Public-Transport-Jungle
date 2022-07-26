@@ -506,6 +506,9 @@ app.get("/supporters", (req, res) => {
                     title: req.url.slice(1, 2).toUpperCase() + req.url.slice(2),
                     loggedin: req.session.userId
                 });
+            })
+            .catch((err) => {
+                console.log(err);
             });
     } else {
         res.redirect("/petition");
