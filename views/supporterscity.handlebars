@@ -4,9 +4,5 @@
     introduction of ONE big national public transport network.</h2>
     <ul class="signers-list">
         {{#supporters}}<li>
-            {{#if userurl}} <a href="{{userurl}}" class="user-link">{{first}} {{last}}</a>
-                {{else}}{{first}} {{last}}
-            {{/if}}
-
-            {{#if city}}, <a href="../supporters/{{cityLink}}" class="user-link">{{city}}</a>{{/if}}</li>
+            {{#if userurl}}<a href="{{userurl}}" class="user-link">{{first}} {{last}}</a>{{else}}{{first}} {{last}}{{/if}}{{#if city}}, <a href="../supporters/{{cityLink}}" class="user-link">{{city}}</a>{{/if}}</li>
         {{/supporters}}</ul>
