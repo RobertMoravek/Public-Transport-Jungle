@@ -23,6 +23,6 @@ https://publictransportjungle.herokuapp.com/
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge/)
-![Express-Handlebars](https://github.com/RobertMoravek/Public-Transport-Jungle/blob/master/client/public/express-handlebars.png)
+![Express-Handlebars](https://github.com/RobertMoravek/Public-Transport-Jungle/blob/master/public/express-handlebars.png)
 ![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white)
 ![Heroku](https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white)
