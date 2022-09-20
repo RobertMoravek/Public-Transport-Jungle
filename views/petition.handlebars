@@ -1,4 +1,3 @@
-
 <h1>No more public transport jungle!</h1>
 <p>The 9-Euro-Ticket has proven, that people are hindered from freely travelling
     not only by high prices, but also by the <span class="bold">hard to navigate web of German
@@ -10,11 +9,12 @@
 <h2>Do you agree? Then sign our petition!</h2>
 <form method="POST" class="petition-form">
     <input type="text" name="signatureURL" id="signatureURL" class="invisible"/>
+    {{!-- Div to contain signature canvas (created by canvas2.js). Data-error contains css class for canvas to grab, if there is an error. --}}
     <div class="signature" data-error="{{#if signingFailed}}{{#if signatureURL}}{{else}}red-border{{/if}}{{/if}}">
         <label for="sigField" class="formlabel bold" id="label-for-canvas">Sign your name with your mouse or finger here:</label>
-        {{!-- <canvas id="sigField" name="sigField" class="canvas {{#if signingFailed}}{{#if signatureURL}}{{signatureURL}}{{else}}red-border{{/if}}{{/if}}"></canvas> --}}
         <p class="deleteCanvas">Delete Signature Field</p>
-{{#if signingFailed}}<p class="red bold">You have not filled in all the required fields. Please check again and resubmit!</p>{{/if}}
+        {{!-- Show error message, if error occured --}}
+        {{#if signingFailed}}<p class="red bold">You have not filled in all the required fields. Please check again and resubmit!</p>{{/if}}
         <input type="submit" id="submitSignature" class="submit" value="SIGN NOW!"></input>
 
     </div>

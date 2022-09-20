@@ -1,4 +1,5 @@
 // Requires and Apps
+
 // -> Express
 const express = require("express");
 const app = express();
@@ -10,7 +11,6 @@ let sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
     sessionSecret = require("./secrets.json").SESSION_SECRET;
 }
-
 
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
@@ -31,16 +31,6 @@ app.set("view engine", "handlebars");
 //END Handlebars config
 
 
-// -> Helmet
-
-
-
-// -> DB
-const db = require("./db.js");
-
-
-// USING and GETTING
-
 
 // USE HTTPS
 
@@ -53,6 +43,28 @@ if (process.env.NODE_ENV == "production") {
     });
 }
 
+
+// -> Helmet
+
+const helmet = require("helmet");
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: ["'self'", "https://www.google.com", "https://www.gstatic.com", "https://code.jquery.com/jquery-3.6.0.min.js"],
+                connectSrc: ["'self'"],
+                styleSrc: ["'self'", "https://fonts.googleapis.com", "'unsafe-inline'"],
+                fontSrc: ["'self'", "https://fonts.gstatic.com"],
+                imgSrc: ["'self'", "https://maps.googleapis.com", "data:"],
+                frameSrc: ["'self'", "https://www.google.com"]
+            }
+        },
+    })
+);
+
+// DB
+const db = require("./db.js");
 
 
 app.use(express.static("./public"));
@@ -95,7 +107,6 @@ app.post("/register", (req, res) => {
                     req.session.signed = false;
                     res.redirect("/profile");
                     return;
-                       
                 })
                 .catch((err) => {
                     let emailExists;
@@ -516,12 +527,7 @@ app.get("/supporters", (req, res) => {
     
 });
 
-app.get("/logout", (req, res) => {
-    req.session = undefined;
-    
-    res.redirect("../login");
-    
-});
+// Suportes per city
 
 app.get("/supporters/:city", (req, res) => {
     if (!req.session.signed) {
@@ -548,6 +554,8 @@ app.get("/supporters/:city", (req, res) => {
     }
 });
 
+// Delete the signature
+
 app.post("/delete-signature", (req, res) => {
     if (!req.session.userId) {
         res.redirect("/login");
@@ -564,6 +572,8 @@ app.post("/delete-signature", (req, res) => {
             });
     }
 });
+
+// Delete the account
 
 app.post("/delete-account", (req, res) => {
     if (!req.session.userId) {
@@ -582,6 +592,18 @@ app.post("/delete-account", (req, res) => {
     }
 });
 
+
+// Logout
+
+app.get("/logout", (req, res) => {
+    req.session = undefined;
+    
+    res.redirect("../login");
+    
+});
+
+
+// Catch-all
 app.get("*", (req, res) => {
     res.redirect("/petition");
 });
@@ -595,10 +617,6 @@ function trim(input) {
     return input;
 }
 
-
-// if (require.main == module) {
-//     app.listen(process.env.PORT || 8080);
-// }
 app.listen(process.env.PORT || 8080);
 
 module.exports = app;

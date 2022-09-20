@@ -8,6 +8,7 @@
 <p>With just <span class="bold">ONE "Monatsticket"</span> you should be able to take <span class="bold">ANY regionanl train,
     tram, subway, bus or commmuter-ferry in the entire country.</span></p>
 <h2>Do you agree? Then register to sign our petition now!</h2>
+{{!-- Mark field with errors (as determined by the server) with red border and prefill them with values from previous attempts, where applicable --}}
 <form method="POST" class="petition-form">
     <label for="firstName" class="formLabel bold">First Name:</label>
     <input type="text" name="firstName" id="firstName" {{#if registrationFailed}}{{#if firstName}}value="{{firstName}}" {{else}} class="red-border"{{/if}}{{/if}}/>
@@ -20,7 +21,6 @@
     <input type="password" name="password" id="password" {{#if registrationFailed}}{{#if password}}value="{{password}}" {{else}} class="red-border"{{/if}}{{/if}}/>
 {{#if registrationFailed}}<p class="red bold">You have not filled in all the required fields. Please check again and resubmit!</p>{{/if}}
     <input type="submit" id="submitSignature" class="submit" value="REGISTER"></input>
-    {{!-- <button class="option-button">REGISTER!</button> --}}
 </form>
 <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"

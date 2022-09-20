@@ -4,11 +4,13 @@
 <h2>Log in, please!</h2>
 <form method="POST" class="petition-form">
     <label for="email" class="formLabel bold">E-Mail:</label>
+    {{!-- Show red red border, if there is an error (as determined by server) and prefill fields with values of failed attempt --}}
     <input type="email" name="email" id="email" {{#if loginFailed}}{{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}{{/if}}/>
     <label for="password" class="formLabel bold">Password:</label>
     <input type="password" name="password" id="password" {{#if loginFailed}}{{#if password}}value="{{password}}" {{else}} class="red-border"{{/if}}{{/if}}/>
     <input type="submit" id="submitSignature" class="submit" value="Log in"></input>
 </form>
+{{!-- Show error message, if error occured --}}
 {{#if loginFailed}}<p class="red bold">You have not filled in all the required fields or your info was incorrect. Please check again and resubmit!</p>{{/if}}
 <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"

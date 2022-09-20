@@ -1,6 +1,7 @@
 const spicedPg = require("spiced-pg");
 const bcrypt = require("bcryptjs");
 
+
 let dbUrl;
 if (process.env.NODE_ENV == 'production') {
     dbUrl = process.env.DATABASE_URL;

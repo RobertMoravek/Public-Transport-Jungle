@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
      id SERIAL PRIMARY KEY,
-     first VARCHAR NOT NULL CHECK (first != ''),
-     last VARCHAR NOT NULL CHECK (last != ''),
+     firstname VARCHAR NOT NULL CHECK (firstname != ''),
+     lastname VARCHAR NOT NULL CHECK (lastname != ''),
      email VARCHAR UNIQUE NOT NULL CHECK (email != ''),
      password VARCHAR NOT NULL CHECK (password != ''),
      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

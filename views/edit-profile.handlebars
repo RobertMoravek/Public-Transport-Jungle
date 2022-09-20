@@ -1,5 +1,6 @@
 
 <h1>No more public transport jungle!</h1>
+{{!-- If petition has been signed, show options to delete signature  --}}
 {{#if signature}}<form action="/delete-signature" method="POST" class="small-form">
         <button type="button" id="deleteSignature" class="option-button">Delete my signature!</button>
         <p id="signatureQuestion" class="invisible">Are you sure?</p>
@@ -7,11 +8,13 @@
         <button type="button" id="deleteSignatureNo" class="option-button invisible grey">No, don't!</button>
 </form>
 {{else}}
+{{!-- Else show CTA --}}
 <form action="/petition" method="GET" class="small-form">
         <button type="submit" id="signAgain" class="option-button">Sign the petition!</button>
 </form>
 {{/if}}
 
+{{!-- Give option to delete account --}}
 <form action="/delete-account" method="POST" class="small-form">
         <button type="button" id="deleteProfile" class="option-button" >Delete my account!</button>
         <p id="profileQuestion" class="invisible">Are you sure?</p>
@@ -21,35 +24,39 @@
 
 <h2>Feel free to add some additional information about yourself!</h2>
 
+{{!-- Show form prefilled with user info, if available. If it's missing or false (as determined by server), give field a red border --}}
 <form method="POST" class="petition-form">
-    <label for="firstName" class="formLabel bold">First Name:</label>
-    <input type="text" name="firstName" id="firstName" {{#if first}}value="{{first}}"{{else}}class="red-border"{{/if}}/>
-    
-    <label for="lastName" class="formLabel bold">Last Name:</label>
-    <input type="text" name="lastName" id="lastName" {{#if last}}value="{{last}}" {{else}}class="red-border"{{/if}}/>
-    <label for="email" class="formLabel bold">E-Mail:</label>
-    <input type="email" name="email" id="email" {{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}{{#if emailExists}}class="red-border"{{/if}}/>
-    {{#if emailExists}}<p class="red bold">This E-Mail is already registered!</p>{{/if}}
-    
-    <label for="password" class="formLabel bold">Password (leave empty, if you don't want to change it):</label>
-    <input type="password" name="password" id="password"/>
-    
-    <label for="age" class="formLabel bold">Your age:</label>
-    <input type="number" min="18" max="130" name="age" id="age" {{#if age}}value="{{age}}" {{/if}}/>
-    
-    <label for="city" class="formLabel bold">City:</label>
-    <input type="text" name="city" id="city" {{#if city}}value="{{city}}" {{/if}}/>
-    
-    <label for="userUrl" class="formLabel bold">Your website:</label>
-    <input type="text" name="userUrl" id="userUrl" {{#if userurl}}value="{{userurl}}" {{/if}}/>
-    {{#if updateFailed}}<p class="red bold">Please Enter all the required information (marked in red)!</p> {{/if}}
+        <label for="firstName" class="formLabel bold">First Name:</label>
+        <input type="text" name="firstName" id="firstName" {{#if first}}value="{{first}}"{{else}}class="red-border"{{/if}}/>
+        
+        <label for="lastName" class="formLabel bold">Last Name:</label>
+        <input type="text" name="lastName" id="lastName" {{#if last}}value="{{last}}" {{else}}class="red-border"{{/if}}/>
+        <label for="email" class="formLabel bold">E-Mail:</label>
+        <input type="email" name="email" id="email" {{#if email}}value="{{email}}" {{else}} class="red-border"{{/if}}{{#if emailExists}}class="red-border"{{/if}}/>
+        {{#if emailExists}}<p class="red bold">This E-Mail is already registered!</p>{{/if}}
+        
+        <label for="password" class="formLabel bold">Password (leave empty, if you don't want to change it):</label>
+        <input type="password" name="password" id="password"/>
+        
+        <label for="age" class="formLabel bold">Your age:</label>
+        <input type="number" min="18" max="130" name="age" id="age" {{#if age}}value="{{age}}" {{/if}}/>
+        
+        <label for="city" class="formLabel bold">City:</label>
+        <input type="text" name="city" id="city" {{#if city}}value="{{city}}" {{/if}}/>
+        
+        <label for="userUrl" class="formLabel bold">Your website:</label>
+        <input type="text" name="userUrl" id="userUrl" {{#if userurl}}value="{{userurl}}" {{/if}}/>
+        {{#if updateFailed}}<p class="red bold">Please Enter all the required information (marked in red)!</p> {{/if}}
 
-    <input type="submit" id="submitSignature" class="submit" value="Update"></input>
+        <input type="submit" id="submitSignature" class="submit" value="Update"></input>
 </form>
 
 
 <script
-    src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-    crossorigin="anonymous"></script>
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+</script>
+
+{{!-- // Script for showing and hiding confirmation buttons of delete features --}}
 <script src="./editscript.js"></script>

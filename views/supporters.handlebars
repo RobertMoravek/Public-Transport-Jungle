@@ -3,6 +3,8 @@
     <h2>We, the undersigned, demand the abolition of regional German public transportation networks and and propose the
     introduction of ONE big national public transport network.</h2>
     <ul class="signers-list">
+        {{!-- Loop through the array of supporters --}}
         {{#supporters}}<li>
+            {{!-- If the user entered a url, show their name as a link to the url. If not, show as text. If the user entered a city, show it as a link to supporters from that city. --}}
             {{#if userurl}}<a href="{{userurl}}" target="_blank" class="user-link">{{first}} {{last}}</a>{{else}}{{first}} {{last}}{{/if}}{{#if city}}, <a href="./supporters/{{cityLink}}" class="user-link">{{city}}</a>{{/if}}</li>
         {{/supporters}}</ul>

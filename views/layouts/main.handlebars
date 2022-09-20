@@ -1,3 +1,5 @@
+
+
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -12,9 +14,11 @@
     </head>
     <body background="..{{url}}-bg.jpg">
        <div class="container">
+        {{!-- Show login button, if user is on registration page --}}
        {{#if register}}<a href="../login" class="login">LOG IN</a>{{/if}}
        {{#if loggedin}}
             <div class="menu">
+                {{!-- Show buttons according to state of user profile --}}
                 {{#if signature}}<a href="../thanks" class="login">MY SIGNATURE</a>{{/if}}
                 {{#if signature}}<a href="../supporters" class="login">SUPPORTERS</a>{{/if}}
                 {{#if profile}}<a href="../edit-profile" class="login">EDIT PROFILE</a>{{/if}}

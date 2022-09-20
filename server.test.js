@@ -61,7 +61,6 @@ test("Users who are logged in and have signed the petition are redirected to the
 test("Users who are logged in and have not signed the petition are redirected to the petition page when they attempt to go to the thank you page", () => {
     cookieSession.mockSessionOnce({
         userId: 30,
-      
     });
     return supertest(app)
         .get("/thanks")
@@ -74,7 +73,6 @@ test("Users who are logged in and have not signed the petition are redirected to
 test("Users who are logged in and have not signed the petition are redirected to the petition page when they attempt to go to the signers page", () => {
     cookieSession.mockSessionOnce({
         userId: 30,
-      
     });
     return supertest(app)
         .get("/supporters")
