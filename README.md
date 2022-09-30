@@ -26,3 +26,7 @@ https://publictransportjungle.herokuapp.com/
 ![Express-Handlebars](https://github.com/RobertMoravek/Public-Transport-Jungle/blob/master/public/express-handlebars.png)
 ![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white)
 ![Heroku](https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white)
+
+## Preview
+
+![Preview](https://github.com/RobertMoravek/Public-Transport-Jungle/blob/master/preview.png)
