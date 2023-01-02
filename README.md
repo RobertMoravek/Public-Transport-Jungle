@@ -5,7 +5,7 @@
 A petition for easier public transport in Germany. This was created during my course at Spiced to pratice Express Handlebars, Canvas and PostgreSQL. 
 
 ## Live website
-https://publictransportjungle.herokuapp.com/
+https://public-transport-jungle.onrender.com
 
 ## Features
 - Fully functional petition website
